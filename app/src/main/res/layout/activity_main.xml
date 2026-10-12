@@ -5,10 +5,48 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#121212"
     tools:context=".MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"></LinearLayout>
+        android:backgroundTint="#121212"
+        android:foregroundTint="#121212"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bird Watcher"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="34sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/listButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:insetLeft="12dp"
+            android:insetTop="12dp"
+            android:insetRight="12dp"
+            android:insetBottom="12dp"
+            android:text="Birds Dictionary"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/addButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:insetLeft="12dp"
+            android:insetTop="12dp"
+            android:insetRight="12dp"
+            android:insetBottom="12dp"
+            android:text="Add Entry"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
