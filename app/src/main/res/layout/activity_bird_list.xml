@@ -16,11 +16,12 @@
         android:textStyle="bold" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/birdsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="625dp" />
 
     <Button
-        android:id="@+id/addButton3"
+        android:id="@+id/returnListButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:insetLeft="12dp"

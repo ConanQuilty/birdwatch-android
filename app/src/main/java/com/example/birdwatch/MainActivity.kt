@@ -1,6 +1,8 @@
 package com.example.birdwatch
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -15,6 +17,21 @@ class MainActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+
+        val listBirdsButton = findViewById<Button>(R.id.listButton)
+        val addBirdButton = findViewById<Button>(R.id.addButton)
+
+        listBirdsButton.setOnClickListener {
+            startActivity(
+                Intent(this, ListBirdsActivity::class.java)
+            )
+        }
+
+        addBirdButton.setOnClickListener {
+            startActivity(
+                Intent(this, AddEditActivity::class.java)
+            )
         }
     }
 }

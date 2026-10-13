@@ -1,5 +1,5 @@
 package com.example.birdwatch
 
-class AppData {
+object AppData {
     val birds = BirdStore()
 }
