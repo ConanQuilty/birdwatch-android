@@ -6,11 +6,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import timber.log.Timber
 
 class BirdAdapter(
     private var allBirds: List<Bird>,
-    private val onEdit: (Bird) -> Unit,
-    private val onDelete: (Bird) -> Unit
+
+    private val listener: BirdListener
 ) : RecyclerView.Adapter<BirdAdapter.BirdViewHolder>() {
 
     class BirdViewHolder(itemView: View):
@@ -20,10 +21,6 @@ class BirdAdapter(
         val descriptionText: TextView = itemView.findViewById(R.id.descriptionText)
 
         val coordinatesText: TextView = itemView.findViewById(R.id.coordinatesText)
-
-        val editButton: Button = itemView.findViewById(R.id.editButton)
-
-        val deleteButton: Button = itemView.findViewById(R.id.deleteButton)
 
     }
     override fun onCreateViewHolder(
@@ -57,12 +54,14 @@ class BirdAdapter(
         holder.coordinatesText.text =
             "X: ${bird.x}, Y: ${bird.y}"
 
-        holder.editButton.setOnClickListener {
-            onEdit(bird)
+        holder.itemView.setOnClickListener {
+            Timber.d("Row tapped: bird id=${bird.id}")
+            listener.onBirdClick(bird)
         }
 
-        holder.deleteButton.setOnClickListener {
-            onDelete(bird)
+        holder.itemView.setOnLongClickListener {
+            Timber.d("Row long-pressed: bird id=${bird.id}")
+            listener.onBirdLongClick(bird)
         }
     }
 

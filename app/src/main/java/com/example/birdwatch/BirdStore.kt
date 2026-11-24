@@ -1,5 +1,6 @@
 package com.example.birdwatch
 
+import timber.log.Timber
 import java.util.concurrent.atomic.AtomicLong
 
 class BirdStore {
@@ -8,12 +9,14 @@ class BirdStore {
     private val lastId = AtomicLong(0L);
 
     fun findAll(): List<Bird> {
+        Timber.v("findAll: ${birds.size} birds")
         return birds
     }
 
     fun create(bird: Bird) {
         bird.id = lastId.incrementAndGet()
         birds.add(bird)
+        Timber.d("create: id=${bird.id}")
     }
 
     fun update(bird: Bird): Boolean {
@@ -26,8 +29,10 @@ class BirdStore {
                 x = bird.x,
                 y = bird.y,
             )
+            Timber.d("update: id=${bird.id} updated")
             true
         } else {
+            Timber.w("update: id=${bird.id} not found")
             false
         }
     }
@@ -36,14 +41,18 @@ class BirdStore {
         val foundBird = findOne(id)
         return if (foundBird != null) {
             birds.remove(foundBird)
+            Timber.d("delete: id=$id removed")
             true
         } else {
+            Timber.w("delete: id=$id not found")
             false
         }
     }
 
     fun findOne(id: Long): Bird? {
-        return birds.find { b -> b.id == id }
+        val bird = birds.find { b -> b.id == id }
+        Timber.v("findOne: id=$id found=${bird != null}")
+        return bird
     }
 
 }

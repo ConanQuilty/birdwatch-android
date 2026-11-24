@@ -7,6 +7,8 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import timber.log.Timber
+
 class AddEditActivity: AppCompatActivity() {
 
     private lateinit var nameInput: EditText
@@ -32,13 +34,19 @@ class AddEditActivity: AppCompatActivity() {
             intent.getLongExtra("id", -1L)
                 .takeIf { it != -1L }
         if (editingId != null) {
+            Timber.d("AddEditActivity opened in ADD mode")
             findViewById<TextView>(R.id.addEditTitle)
                 .text = "Edit Bird"
             loadExistingBird(editingId!!)
+        } else {
+            Timber.d("AddEditActivity opened in EDIT mode for bird id=$editingId")
         }
 
         saveButton.setOnClickListener { saveBird() }
-        cancelButton.setOnClickListener { finish() }
+        cancelButton.setOnClickListener {
+            Timber.d("Add/edit cancelled")
+            finish()
+        }
     }
 
     private fun loadExistingBird(id: Long) {
@@ -46,6 +54,7 @@ class AddEditActivity: AppCompatActivity() {
         val bird = AppData.birds.findOne(id)
 
         if (bird == null) {
+            Timber.w("Tried to edit bird id=$id but it wasn't found")
             Toast.makeText(
                 this,
                 "Bird not found",
@@ -68,18 +77,21 @@ class AddEditActivity: AppCompatActivity() {
         val description = descriptionInput.text.toString().trim()
 
         if (name.isEmpty()) {
+            Timber.w("Validation failed: name is empty")
             nameInput.error = "Title is required"
             return
         }
 
         val x = xInput.text.toString().toDoubleOrNull()
         if (x == null) {
+            Timber.w("Validation failed: X is not a number")
             xInput.error = "Enter a valid number"
             return
         }
 
         val y = yInput.text.toString().toDoubleOrNull()
         if (y == null) {
+            Timber.w("Validation failed: Y is not a number")
             yInput.error = "Enter a valid number"
             return
         }
@@ -93,6 +105,7 @@ class AddEditActivity: AppCompatActivity() {
             )
 
             AppData.birds.create(bird)
+            Timber.i("Created bird id=${bird.id}, name=${bird.name}")
             Toast.makeText(
                 this,
                 "Bird created",
@@ -110,6 +123,7 @@ class AddEditActivity: AppCompatActivity() {
             )
 
             AppData.birds.update(bird)
+            Timber.i("Updated bird id=${bird.id}")
             Toast.makeText(
                 this,
                 "Bird updated",
