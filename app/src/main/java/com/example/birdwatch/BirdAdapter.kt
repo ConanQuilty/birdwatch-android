@@ -7,6 +7,8 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import timber.log.Timber
+import android.net.Uri
+import android.widget.ImageView
 
 class BirdAdapter(
     private var allBirds: List<Bird>,
@@ -21,6 +23,8 @@ class BirdAdapter(
         val descriptionText: TextView = itemView.findViewById(R.id.descriptionText)
 
         val coordinatesText: TextView = itemView.findViewById(R.id.coordinatesText)
+
+        val markImage: ImageView = itemView.findViewById(R.id.birdImage)
 
     }
     override fun onCreateViewHolder(
@@ -53,6 +57,14 @@ class BirdAdapter(
 
         holder.coordinatesText.text =
             "X: ${bird.x}, Y: ${bird.y}"
+
+        val imageUri = bird.imageUri?.let { Uri.parse(it) }
+
+        if (imageUri != null) {
+            holder.markImage.setImageURI(imageUri)
+        } else {
+            holder.markImage.setImageResource(android.R.drawable.ic_menu_gallery)
+        }
 
         holder.itemView.setOnClickListener {
             Timber.d("Row tapped: bird id=${bird.id}")

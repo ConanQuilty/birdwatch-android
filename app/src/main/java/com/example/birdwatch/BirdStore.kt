@@ -14,21 +14,21 @@ class BirdStore {
     }
 
     fun create(bird: Bird) {
+        bird.validate()
         bird.id = lastId.incrementAndGet()
         birds.add(bird)
         Timber.d("create: id=${bird.id}")
     }
 
     fun update(bird: Bird): Boolean {
+        bird.validate()
         val foundBird = findOne(bird.id)
         return if (foundBird != null) {
-            val foundIndex = birds.indexOf(foundBird)
-            birds[foundIndex] = birds[foundIndex].copy(
-                name = bird.name,
-                description = bird.description,
-                x = bird.x,
-                y = bird.y,
-            )
+            foundBird.name = bird.name
+            foundBird.description = bird.description
+            foundBird.x = bird.x
+            foundBird.y = bird.y
+            foundBird.imageUri = bird.imageUri   // new: keep the photo too
             Timber.d("update: id=${bird.id} updated")
             true
         } else {
