@@ -35,6 +35,8 @@ class AddEditActivity: AppCompatActivity() {
 
         val saveButton = findViewById<Button>(R.id.saveButton)
         val cancelButton = findViewById<Button>(R.id.cancelButton)
+        var selectedLatitude: Double? = null
+        var selectedLongitude: Double? = null
 
         imagePreview = findViewById(R.id.imageViewAdd)
         val imagePicker =
@@ -56,6 +58,41 @@ class AddEditActivity: AppCompatActivity() {
             }
         findViewById<Button>(R.id.imagePickButton).setOnClickListener {
             imagePicker.launch(arrayOf("image/*"))
+        }
+
+        val mapPicker =
+            registerForActivityResult(
+                ActivityResultContracts.StartActivityForResult()
+            ) { result ->
+                if (result.resultCode == RESULT_OK) {
+                    val data = result.data ?: return@registerForActivityResult
+                    selectedLatitude = data.getDoubleExtra("latitude", 0.0)
+                    selectedLongitude = data.getDoubleExtra("longitude", 0.0)
+
+                    selectedLatitude?.let {
+                        xInput.setText(it.toString())
+                    }
+
+                    selectedLongitude?.let {
+                        yInput.setText(it.toString())
+                    }
+                }
+            }
+
+        findViewById<Button>(R.id.buttonLoc).setOnClickListener {
+            val mapIntent = Intent(this, MapPickerActivity::class.java)
+
+            xInput.text.toString().toDoubleOrNull()
+                ?.takeIf { it in -90.0..90.0 }
+                ?.let { mapIntent.putExtra("latitude", it) }
+
+            yInput.text.toString().toDoubleOrNull()
+                ?.takeIf { it in -180.0..180.0 }
+                ?.let { mapIntent.putExtra("longitude", it) }
+
+            mapIntent.putExtra("title", nameInput.text.toString().trim())   // used in 7b
+
+            mapPicker.launch(mapIntent)
         }
 
         editingId =
@@ -99,6 +136,7 @@ class AddEditActivity: AppCompatActivity() {
         yInput.setText(bird.y.toString())
         selectedImageUri = bird.imageUri?.let { Uri.parse(it) }
 
+
         if (selectedImageUri != null) {
             imagePreview.setImageURI(selectedImageUri)
         } else {
@@ -134,6 +172,7 @@ class AddEditActivity: AppCompatActivity() {
         try {
             val bird = Bird(
                 name = name,
+                id = editingId ?: 0L,
                 description = description,
                 x = x,
                 y = y,
@@ -147,9 +186,15 @@ class AddEditActivity: AppCompatActivity() {
                 Timber.i("Created bird id=${bird.id}, name=${bird.name}")
                 Toast.makeText(this, "Bird created", Toast.LENGTH_SHORT).show()
             } else {
-                AppData.birds.update(bird)
-                Timber.i("Updated bird id=${bird.id}")
-                Toast.makeText(this, "Bird updated", Toast.LENGTH_SHORT).show()
+                val updated = AppData.birds.update(bird)
+                if (updated) {
+                    Timber.i("Updated bird id=${bird.id}")
+                    Toast.makeText(this, "Bird updated", Toast.LENGTH_SHORT).show()
+                } else {
+                    Timber.w("Update failed: bird id=${bird.id} not found")
+                    Toast.makeText(this, "Couldn't find that bird to update", Toast.LENGTH_SHORT).show()
+                    return
+                }
             }
 
             finish()
