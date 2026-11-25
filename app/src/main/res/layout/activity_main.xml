@@ -48,5 +48,17 @@
             android:text="Add Entry"
             android:textAlignment="center"
             android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/mapButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:insetLeft="12dp"
+            android:insetTop="12dp"
+            android:insetRight="12dp"
+            android:insetBottom="12dp"
+            android:text="View Map"
+            android:textAlignment="center"
+            android:textSize="20sp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

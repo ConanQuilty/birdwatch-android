@@ -40,6 +40,10 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
+        findViewById<Button>(R.id.mapButton).setOnClickListener {
+            startActivity(Intent(this, MapListActivity::class.java))
+        }
+
         AppData.initialize(this)
     }
 }
