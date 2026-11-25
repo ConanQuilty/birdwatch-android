@@ -3,10 +3,13 @@ package com.example.birdwatch
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.BoundingBox
@@ -35,10 +38,10 @@ class MapListActivity : AppCompatActivity() {
         txtDescription = findViewById(R.id.mapDescText)
         imgPlace = findViewById(R.id.mapImageView)
 
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        toolbar.title = title
+        setSupportActionBar(toolbar)
 
-        findViewById<Button>(R.id.mapBackButton).setOnClickListener {
-            finish()
-        }
 
         findViewById<Button>(R.id.mapEditButton).setOnClickListener {
             val bird = selectedBird ?: return@setOnClickListener
@@ -147,6 +150,20 @@ class MapListActivity : AppCompatActivity() {
 
         mapView.tileProvider.clearTileCache()
         mapView.invalidate()
+    }
+
+    // Load the shared Back menu onto this screen's toolbar
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_back, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    // Back tapped: close this screen
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.item_back -> finish()
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
 

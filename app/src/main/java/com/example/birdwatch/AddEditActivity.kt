@@ -9,8 +9,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import timber.log.Timber
 import android.net.Uri
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.widget.Toolbar
 
 class AddEditActivity: AppCompatActivity() {
 
@@ -28,13 +31,16 @@ class AddEditActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_edit)
 
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        toolbar.title = title
+        setSupportActionBar(toolbar)
+
         nameInput = findViewById(R.id.nameField)
         descriptionInput = findViewById(R.id.descriptionField)
         xInput = findViewById(R.id.xField)
         yInput = findViewById(R.id.yField)
 
         val saveButton = findViewById<Button>(R.id.saveButton)
-        val cancelButton = findViewById<Button>(R.id.cancelButton)
         var selectedLatitude: Double? = null
         var selectedLongitude: Double? = null
 
@@ -108,10 +114,6 @@ class AddEditActivity: AppCompatActivity() {
         }
 
         saveButton.setOnClickListener { saveBird() }
-        cancelButton.setOnClickListener {
-            Timber.d("Add/edit cancelled")
-            finish()
-        }
     }
 
     private fun loadExistingBird(id: Long) {
@@ -208,6 +210,20 @@ class AddEditActivity: AppCompatActivity() {
                 Toast.LENGTH_LONG
             ).show()
         }
+    }
+
+    // Load the shared Back menu onto this screen's toolbar
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_back, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    // Back tapped: close this screen
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.item_back -> finish()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 }

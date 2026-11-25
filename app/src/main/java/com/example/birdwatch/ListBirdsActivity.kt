@@ -2,9 +2,12 @@ package com.example.birdwatch
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import timber.log.Timber
@@ -19,6 +22,9 @@ class ListBirdsActivity: AppCompatActivity() {
 
         setContentView(R.layout.activity_bird_list)
         Timber.d("ListBirdsActivity created")
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        toolbar.title = title
+        setSupportActionBar(toolbar)
 
         recyclerView = findViewById(R.id.birdsRecyclerView)
 
@@ -41,14 +47,6 @@ class ListBirdsActivity: AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
-        val returnButton = findViewById<Button>(R.id.returnListButton)
-
-        returnButton.setOnClickListener {
-            Timber.d("Return button pressed")
-            startActivity(
-                Intent(this, MainActivity::class.java)
-            )
-        }
     }
 
     override fun onResume() {
@@ -92,6 +90,21 @@ class ListBirdsActivity: AppCompatActivity() {
             }                                   // {_, _ ->} Ignores the a,b vals that the setNegativeButton has to add the Timber log
             .setNegativeButton("Cancel") { _, _ -> Timber.d("Delete cancelled for bird id=${bird.id}")}
             .show()
+    }
+
+
+    // Load the shared Back menu onto this screen's toolbar
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_back, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    // Back tapped: close this screen
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.item_back -> finish()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 }
