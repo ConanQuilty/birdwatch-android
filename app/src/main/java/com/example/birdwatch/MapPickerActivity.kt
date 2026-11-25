@@ -26,7 +26,7 @@ class MapPickerActivity : AppCompatActivity() {
             "Birdwatch-ConanQuilty/1.0 (github.com/ConanQuilty/birdwatch-android)"
         setContentView(R.layout.activity_map_picker)
 
-        map = findViewById(R.id.map)
+        map = findViewById(R.id.mapList)
         map.setTileSource(TileSourceFactory.MAPNIK)
         map.setMultiTouchControls(true)
 
