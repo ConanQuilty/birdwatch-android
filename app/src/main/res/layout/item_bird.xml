@@ -39,8 +39,8 @@
     <ImageView
         android:id="@+id/birdImage"
         android:layout_width="match_parent"
-        android:layout_height="240dp"
-        android:scaleType="centerCrop"
+        android:layout_height="360dp"
+        android:scaleType="fitCenter"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
 
